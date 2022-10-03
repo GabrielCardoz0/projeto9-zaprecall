@@ -1,20 +1,14 @@
 import styled from 'styled-components'
 
-
-import logo from './assets/img/logo.png'
 import setaPlay from './assets/img/seta_play.png'
 import icone_erro from "./assets/img/icone_erro.png"
 import icone_quase from "./assets/img/icone_quase.png"
 import icone_certo from "./assets/img/icone_certo.png"
 
-
-import setarVirar from "./assets/img/seta_virar.png"
-
 import React from 'react'
 
-// import RenderizarPerguntas from './RenderizarPerguntas'
-
-
+import RenderizarPerguntas from './RenderizarPerguntas'
+import LogoContainer from './LogoContainer'
 
 
 export default function App() {
@@ -30,88 +24,16 @@ export default function App() {
         { Q: "Usamos estado (state) para ___", R: "dizer para o React quais informações quando atualizadas devem renderizar a tela novamente", Bott: setaPlay }
     ])
 
-
-
-
-
     const [interruptor, setInterruptor] = React.useState(true)
-
     const [PerguntasRespondidas, setPerguntasRespondidas] = React.useState([])
-
     const [controle, setControle] = React.useState()
-
     const [ativarZap, setAtivarZap] = React.useState(false)
 
-
-
-    function RenderizarPerguntas(obj, ind) {
-
-        const [PerguntasAbertas, setPerguntasAbertas] = React.useState([])
-    
-        const [PerguntasClicadas, setPerguntasClicadas] = React.useState([])
-    
-        if (PerguntasRespondidas.includes(ind)) {
-            return (
-                <footer className='pergunta-fechada' key={ind}>
-                    <p>Pergunta {ind + 1}</p>
-                    <img src={obj.Bott} alt="" />
-                </footer>
-            )
-        }
-        else if (PerguntasClicadas.includes(ind)) {
-    
-            if (PerguntasAbertas.includes(ind)) {
-                return (
-                    <div className='pergunta-aberta' key={ind}>
-                        {obj.R}
-                        {/* <img src={setarVirar} alt='' onClick={() => TrocarBotton(ind)} /> */}
-                    </div>
-                )
-            } else {
-                return (
-                    <div className='pergunta-aberta' key={ind}>
-                        {obj.Q}
-                        <img src={setarVirar} alt='' onClick={() => {
-                            setPerguntasAbertas([...PerguntasAbertas, ind])
-                            setControle(ind)
-                            setAtivarZap(true)
-                        }} />
-                    </div>
-                )
-            }
-        } else if (interruptor) {
-            return (
-                <footer className='pergunta-fechada' key={ind}>
-                    <p>Pergunta {ind + 1}</p>
-                    <img src={obj.Bott} alt="" onClick={() => {
-                        setPerguntasClicadas([...PerguntasClicadas, ind])
-                        setInterruptor(false)
-                    }
-                    } />
-                </footer>
-            )
-        } else {
-            return (
-                <footer className='pergunta-fechada' key={ind}>
-                    <p>Pergunta {ind + 1}</p>
-                    <img src={obj.Bott} alt="" />
-                </footer>
-            )
-        }
-    }
-    
-
-
-
-
-
-
-
-
-
     function zapLembrar(Btype) {
+
         if (ativarZap) {
             const listaP = [...listaPerguntas]
+
             if (Btype === "nãoLembrei") {
                 listaP[controle].Bott = icone_erro
             } else if (Btype === 'Quase') {
@@ -126,21 +48,13 @@ export default function App() {
         setAtivarZap(false)
     }
 
-
-
-
-
     return (
         <>
             <ScreenContainer>
 
-                <LogoContainer>
-                    <img src={logo} alt="" />
-                    <h1>ZapRecall</h1>
-                </LogoContainer>
+                <LogoContainer />
 
-                {listaPerguntas.map((o, i) => RenderizarPerguntas(o, i))}
-
+                {listaPerguntas.map((o, i) => <RenderizarPerguntas obj={o} ind={i} interruptor={interruptor} setInterruptor={setInterruptor} PerguntasRespondidas={PerguntasRespondidas} setControle={setControle} setAtivarZap={setAtivarZap} />)}
 
                 <FooterConcluidos>
                     <ContainerBotoes>
@@ -150,9 +64,7 @@ export default function App() {
                     </ContainerBotoes>
                     {PerguntasRespondidas.length}/{listaPerguntas.length} concluídos
                 </FooterConcluidos>
-
             </ScreenContainer>
-
         </>
     )
 }
@@ -170,24 +82,6 @@ padding: 0px;
 padding-bottom: 200px;
 `;
 
-const LogoContainer = styled.div`
-    display: flex;
-    align-items: center;
-    margin: 40px 0 20px 0;
-    img {
-        width: 52px;
-    }
-    
-    h1 {
-        font-family: 'Righteous';
-        font-style: normal;
-        font-weight: 400;
-        font-size: 36px;
-        line-height: 45px;
-        color: #FFFFFF;
-        margin-left: 20px;
-    }
-`;
 
 const ContainerBotoes = styled.div`
 display: flex;
